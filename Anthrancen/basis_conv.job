@@ -1,0 +1,68 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=16
+#SBATCH -p rosa.p
+#SBATCH --time=0-06:00:00
+
+export OMP_ NUM_THREADS=1
+
+ml hpc-env/13.1
+ml gaussian/g16.c01
+
+rm -f etot_vs_basis.dat
+
+for basis in "STO-3G" "3-21+G" "6-21G**" "4-31G**" "6-31+G**" "6-311+G**" 
+do
+    echo "Running for basis set ${basis} "
+
+    # self-consistent calculation
+    cat > basis_conv.scf.in << EOF
+%NprocShared=16
+
+# pbepbe/${basis} scf=tight int=finegrid
+
+basis set convergence
+
+0 1
+! Atome und Positionen werden hier definiert:
+C 5.82595803 4.30575664 0.00000000
+C 4.60757096 2.17521890 0.00000000
+H 4.61030655 1.08307335 0.00000000
+C 5.82956532 2.85919852 0.00000000
+C 8.26543394 2.87707686 0.00000000
+H 9.21564995 2.34311211 0.00000000
+C 8.26187851 4.30001245 0.00000000
+H 9.20941667 4.83871597 0.00000000
+C 7.08371336 2.17917731 0.00000000
+H 7.08529635 1.08808057 0.00000000
+C 7.07670002 4.99201683 0.00000000
+H 2.13525806 1.07573065 0.00000000
+C 3.38217280 2.85308089 0.00000000
+C 4.60055987 4.98361863 0.00000000
+H 4.59782429 6.07576418 0.00000000
+C 3.37856551 4.29963901 0.00000000
+C 0.94269689 4.28176062 0.00000000
+H -0.00751913 4.81572535 0.00000000
+C 0.94625233 2.85882502 0.00000000
+H -0.00128584 2.32012151 0.00000000
+C 2.12441745 4.97966020 0.00000000
+H 2.12283442 6.07075694 0.00000000
+C 2.13143083 2.16682067 0.00000000
+H 7.07287286 6.08310685 0.00000000
+! Am Ende muss eine leere Zeile hinzugefuegt werden.
+
+EOF
+
+    # run the g16 calculation
+    g16 < basis_conv.scf.in > basis_conv.scf.out
+
+    # collect the ecutwfc and total-energy from the pw.cutoff.scf.out output-file
+    
+    grep -e ' SCF Done:  E(RPBE-PBE) =' -e ! basis_conv.scf.out | \
+       awk '{print basis, $(NF-4)}' basis="${basis}" >> etot_vs_basis.dat
+
+
+done
+
+
+
