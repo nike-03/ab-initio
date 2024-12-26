@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=16
+#SBATCH -p rosa.p
+#SBATCH --time=0-02:00:00
+
+export OMP_ NUM_THREADS=1
+
+ml hpc-env/13.1
+ml gaussian/g16.c01
+
+filename="scf_partial_charges_sto-3g"
+
+g16 < ${filename}.in > ${filename}.out

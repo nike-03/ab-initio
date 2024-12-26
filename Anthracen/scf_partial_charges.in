@@ -1,0 +1,12 @@
+! Anzahl der cpus:
+%NprocShared=16
+
+! Hier muss das Basisset definiert werden (%%%%)
+#p pbepbe/%%%% pop=regular scf=tight int=finegrid pop=Hirshfeld
+
+orbitals calculation
+
+0 1
+! Hier werden die Atome und deren Positionen angegeben:
+
+! Am Ende muss eine leere Zeile hinzugefuegt werden.
