@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=16
+#SBATCH -p rosa.p
+#SBATCH --time=0-02:00:00
+
+export OMP_ NUM_THREADS=1
+
+ml hpc-env/13.1
+ml gaussian/g16.c01
+
+# Hier muss Index vom HOMO-orbital angegeben werden:
+HOMO=47
+
+for orb_idx in 1 2 3 4
+do
+cubegen 1 MO=$((HOMO-orb_idx)) Test.FChk orbital_HOMO-${orb_idx}.cube 0 h > cubegen_HOMO-${orb_idx}.out
+done
+cubegen 1 MO=${HOMO} Test.FChk orbital_HOMO.cube 0 h > cubegen_HOMO.out
+cubegen 1 MO=$((HOMO+1)) Test.FChk orbital_LUMO.cube 0 h > cubegen_LUMO.out
+for orb_idx in 1 2 3 4
+do
+cubegen 1 MO=$((HOMO+1+orb_idx)) Test.FChk orbital_LUMO+${orb_idx}.cube 0 h > cubegen_LUMO-${orb_idx}.out
+done
+
+
+
