@@ -1,8 +1,0 @@
- Top CubeGen          Fri Dec 20 17:01:30 2024
- Aft UFChkP           Fri Dec 20 17:01:31 2024        0.50 cpu,        0.50 elapsed
- Aft DecCub           Fri Dec 20 17:01:31 2024        0.04 cpu,        0.04 elapsed
- Aft Density          Fri Dec 20 17:01:31 2024        0.00 cpu,        0.00 elapsed
- Bef DoCube           Fri Dec 20 17:01:31 2024        0.00 cpu,        0.01 elapsed
- There are a total of      508760 grid points.
- ElSum from         orbitals=        0.4985401817
- Aft DoCube           Fri Dec 20 17:01:31 2024        0.68 cpu,        0.69 elapsed
