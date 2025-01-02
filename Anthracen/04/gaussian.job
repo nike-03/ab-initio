@@ -9,7 +9,7 @@ export OMP_ NUM_THREADS=1
 ml hpc-env/13.1
 ml gaussian/g16.c01
 
-filename="scf_partial_charges_sto-3g"
+filename="scf_partial_charges"
 
 g16 < ${filename}.in > ${filename}.out
 
